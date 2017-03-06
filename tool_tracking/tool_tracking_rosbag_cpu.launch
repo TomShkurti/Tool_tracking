@@ -1,6 +1,5 @@
 <launch>
-		<node pkg="rosbag" type="play" name="rosbag" args="/home/rxh349/ros_ws/src/subset.bag">
-		</node>
+	<node pkg="rosbag" type="play" name="rosbag" args="$(find tool_tracking)/bag/subset.bag"/>
 
 	<node name="vesselness_left" pkg="vesselness_image_filter" type="vesselness_image_filter_cpu_bw_node">
          <remap from="image_in" to="/davinci_endo/left/image_raw" />  

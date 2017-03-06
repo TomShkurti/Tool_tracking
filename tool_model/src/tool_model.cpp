@@ -73,13 +73,13 @@ ToolModel::ToolModel() {
     q_gripper.at<double>(2, 0) = 0;
 
     /****initialize the vertices fo different part of tools****/
-    load_model_vertices("/home/rxh349/ros_ws/src/Tool_tracking/tool_model/tool_parts/refine_cylinder_3.obj",
+    load_model_vertices("/home/tom/catkin_ws/src/project_stuff/Tool_tracking/tool_model/tool_parts/refine_cylinder_3.obj",
                         body_vertices, body_Vnormal, body_faces, body_neighbors);
-    load_model_vertices("/home/rxh349/ros_ws/src/Tool_tracking/tool_model/tool_parts/refine_ellipse_3.obj",
+    load_model_vertices("/home/tom/catkin_ws/src/project_stuff/Tool_tracking/tool_model/tool_parts/refine_ellipse_3.obj",
                         ellipse_vertices, ellipse_Vnormal, ellipse_faces, ellipse_neighbors);
-    load_model_vertices("/home/rxh349/ros_ws/src/Tool_tracking/tool_model/tool_parts/gripper2_1.obj", griper1_vertices,
+    load_model_vertices("/home/tom/catkin_ws/src/project_stuff/Tool_tracking/tool_model/tool_parts/gripper2_1.obj", griper1_vertices,
                         griper1_Vnormal, griper1_faces, griper1_neighbors);
-    load_model_vertices("/home/rxh349/ros_ws/src/Tool_tracking/tool_model/tool_parts/gripper2_2.obj", griper2_vertices,
+    load_model_vertices("/home/tom/catkin_ws/src/project_stuff/Tool_tracking/tool_model/tool_parts/gripper2_2.obj", griper2_vertices,
                         griper2_Vnormal, griper2_faces, griper2_neighbors);
 
     modify_model_(body_vertices, body_Vnormal, body_Vpts, body_Npts, offset_body, body_Vmat, body_Nmat);
@@ -145,7 +145,7 @@ void ToolModel::load_model_vertices(const char *path, std::vector<glm::vec3> &ou
 
     FILE *file = fopen(path, "r");
     if (file == NULL) {
-        printf("Impossible to open the file ! Are you in the right path ?\n");
+        printf("Impossible to open the file %s ! Are you in the right path ?\n", path);
         return;
     }
 

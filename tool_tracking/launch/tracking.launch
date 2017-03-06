@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="rosbag" type="play" name="rosbag" args="$(find tool_tracking)/bag/subset.bag"/>
+	<!--node pkg="tool_tracking" name="test" type="tracking_main"/-->
+</launch>

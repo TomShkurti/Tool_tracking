@@ -28,11 +28,10 @@ catkin_package(CATKIN_DEPENDS message_runtime std_msgs sensor_msgs geometry_msgs
 # Libraries: uncomment the following and edit arguments to create a new library
 # add_library(my_lib src/my_lib.cpp)   
 
-  cs_add_library(tool_tracking
-              src/particle_filter.cpp
-  )
+cs_add_library(tool_tracking src/kalman_filter.cpp
+)
 
-cs_add_executable(tracking_main src/tracking_main.cpp)
+cs_add_executable(tracking_main src/tracking_kalman.cpp)
 #the following is required, if desire to link a node in this package with a library created in this same package
 # edit the arguments to reference the named node and named library within this package
 # target_link_library(example my_lib)
