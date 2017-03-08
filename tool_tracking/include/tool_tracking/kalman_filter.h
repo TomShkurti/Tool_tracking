@@ -50,6 +50,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <Eigen/Eigen>
+
 #include <string>
 #include <cstring>
 
@@ -69,7 +71,17 @@ class KalmanFilter {
 
 private:
 
-	ros::NodeHandle nh;  //may need this
+	ros::NodeHandle nh;
+	
+	Eigen::Matrix<double, 14, 14> A;
+	Eigen::Matrix<double, 14, 14> B;
+	Eigen::Matrix<double, 14, 14> C;
+	
+	Eigen::Matrix<double, 14, 14> R;
+	Eigen::Matrix<double, 14, 14> Q;
+	
+	Eigen::Matrix<double, 14, 1> mu;
+	Eigen::Matrix<double, 14, 14> sigma;
 
 public:
 
@@ -94,7 +106,9 @@ public:
 		const cv::Mat &segmented_left,
 		const cv::Mat &segmented_right,
 		const cv::Mat &P_left,
-		const cv::Mat &P_right
+		const cv::Mat &P_right,
+		const Eigen::Matrix<double, 14, 1> & ut,
+		const Eigen::Matrix<double, 14, 1> & zt
 	);
 };
 

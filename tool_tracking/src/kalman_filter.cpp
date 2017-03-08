@@ -43,6 +43,15 @@ using namespace std;
 
 KalmanFilter::KalmanFilter(ros::NodeHandle *nodehandle) : nh(*nodehandle){
 	ROS_INFO("Hello! Being initialized!");
+	A = Eigen::Matrix<double, 14, 14>::Identity(14, 14);//The robot is immobile when not commanded.
+	B = Eigen::Matrix<double, 14, 14>::Identity(14, 14) * 5.0;//Disregarding noise, the robot will move by an amount proportional to its velocity. Velocity is computed by taking the difference of values outputted five times per loop iteration, so over one loop iteration the robot can be expected to move by five times the velocity.
+	C = Eigen::Matrix<double, 14, 14>::Identity(14, 14);//The potentiometers accurately reflect joint movement in the same scale, disregarding noise.
+	
+	R = Eigen::Matrix<double, 14, 14>::Identity(14, 14) * 0.037;//Rough averages of error values from the paper.
+	Q = Eigen::Matrix<double, 14, 14>::Identity(14, 14) * 0.00038;
+	
+	mu = Eigen::Matrix<double, 14, 1>::Zero(14, 1);
+	sigma = Eigen::Matrix<double, 14, 14>::Identity(14, 14) * 0.037;
 };
 
 KalmanFilter::~KalmanFilter() {
@@ -54,10 +63,18 @@ std::vector<cv::Mat> KalmanFilter::trackingTool(
 	const cv::Mat &segmented_left,
 	const cv::Mat &segmented_right,
 	const cv::Mat &P_left,
-	const cv::Mat &P_right
+	const cv::Mat &P_right,
+	const Eigen::Matrix<double, 14, 1> & ut,
+	const Eigen::Matrix<double, 14, 1> & zt
 ){
 
-	ROS_INFO("TRACING");
+	Eigen::Matrix<double, 14, 1> mubar = A * mu + B * ut;
+	Eigen::Matrix<double, 14, 14> sigmabar = (A * sigma) * A.transpose() + R;
+	
+	Eigen::Matrix<double, 14, 14> K = sigmabar * C.transpose() * (C * sigmabar * C.transpose() + Q).inverse();
+	mu = mubar + K * (zt - C * mubar);
+	sigma = (Eigen::Matrix<double, 14, 14>::Identity(14, 14) - K * C) * sigmabar;
+
 	std::vector<cv::Mat> trackingImages;
 	trackingImages.resize(2);
 	trackingImages[0] = P_left;
